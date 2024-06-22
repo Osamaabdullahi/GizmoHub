@@ -1,0 +1,90 @@
+"use client";
+
+import React, { useState } from "react";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+
+const ProductDetailPage = ({ product }) => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const handlePreviousImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === 0 ? product.images.length - 1 : prevIndex - 1
+    );
+  };
+
+  const handleNextImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === product.images.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  return (
+    <div className="py-8  bg-gray-100 ">
+      <div className="container mx-auto px-4">
+        <div className="flex flex-col md:flex-row items-center">
+          {/* Product Image */}
+          <div className="md:w-1/2 mb-8 md:mb-0">
+            {/* Main Image */}
+            <div className="relative w-full h-[400px] md:h-[400px]">
+              <img
+                src={product.images[currentImageIndex]}
+                alt={product.name}
+                className="w-full h-full object-cover rounded-lg shadow-md"
+              />
+              {/* Previous Image Button */}
+              <button
+                onClick={handlePreviousImage}
+                className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white rounded-full p-2 shadow-md opacity-75 hover:opacity-100 focus:outline-none"
+              >
+                <FaChevronLeft className="w-6 h-6" />
+              </button>
+              {/* Next Image Button */}
+              <button
+                onClick={handleNextImage}
+                className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white rounded-full p-2 shadow-md opacity-75 hover:opacity-100 focus:outline-none"
+              >
+                <FaChevronRight className="w-6 h-6" />
+              </button>
+            </div>
+            {/* Image Thumbnails */}
+            <div className="flex justify-center mt-4 space-x-4">
+              {product.images.map((image, index) => (
+                <img
+                  key={index}
+                  src={image}
+                  alt={product.name}
+                  className={`w-12 h-12 object-cover rounded-lg cursor-pointer ${
+                    index === currentImageIndex
+                      ? "border-2 border-blue-600"
+                      : ""
+                  }`}
+                  onClick={() => setCurrentImageIndex(index)}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Product Details */}
+          <div className="md:w-1/2 md:pl-8">
+            <h1 className="text-3xl font-semibold mb-4">{product.name}</h1>
+            <div className="flex justify-between items-center mb-4">
+              <p className="text-xl font-bold text-blue-600">{product.price}</p>
+              <p className="text-gray-500 line-through">{product.oldPrice}</p>
+            </div>
+            <p className="text-lg mb-4">{product.description}</p>
+            <div className="flex items-center space-x-4">
+              <button className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">
+                Add to Cart
+              </button>
+              <button className="bg-gray-200 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-300">
+                Wishlist
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ProductDetailPage;
