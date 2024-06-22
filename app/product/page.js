@@ -11,9 +11,10 @@ import {
   FaChevronDown,
   FaChevronUp,
   FaChevronRight,
+  FaHeart,
 } from "react-icons/fa";
 
-const ProductSection = () => {
+const Product = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const products = [
@@ -73,39 +74,40 @@ const ProductSection = () => {
     <div className="py-16 bg-gray-100">
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row">
-          {/* Fixed Filter Section */}
+          {/* Redesigned Filter Section */}
           <div
-            className={`md:w-1/4 bg-white p-4 rounded-lg shadow-md ${
+            className={`${
               isFilterOpen ? "block" : "hidden"
-            } md:block sticky top-16`}
+            } md:block w-full md:w-1/4 bg-white p-6 rounded-lg shadow-md md:sticky top-16 transition-all duration-300 ease-in-out`}
           >
-            <h2 className="text-lg font-semibold mb-4 md:hidden flex items-center justify-between">
-              Filter By
+            <div className="flex justify-between items-center mb-4 md:hidden">
+              <h2 className="text-lg font-semibold">Filter By</h2>
               <button
                 onClick={toggleFilter}
                 className="text-blue-600 hover:text-blue-700"
               >
                 {isFilterOpen ? <FaChevronUp /> : <FaChevronDown />}
               </button>
-            </h2>
-            <div className="hidden md:block">
+            </div>
+
+            <div className="space-y-6">
               {/* Category Filter */}
-              <div className="mb-6">
-                <h3 className="text-sm font-semibold mb-2 flex items-center">
+              <div className="space-y-4">
+                <h3 className="text-sm font-semibold flex items-center">
                   <span className="mr-2">
                     <FaMobileAlt />
-                  </span>{" "}
-                  Mobile Phones
+                  </span>
+                  Categories
                 </h3>
-                <ul className="space-y-1">
+                <ul className="space-y-2">
                   <li>
                     <a
                       href="#"
                       className="text-blue-600 hover:underline flex items-center"
                     >
-                      <span className="mr-1">
+                      <span className="mr-2">
                         <FaLaptop />
-                      </span>{" "}
+                      </span>
                       Laptops
                     </a>
                   </li>
@@ -114,9 +116,9 @@ const ProductSection = () => {
                       href="#"
                       className="text-blue-600 hover:underline flex items-center"
                     >
-                      <span className="mr-1">
+                      <span className="mr-2">
                         <FaHeadphones />
-                      </span>{" "}
+                      </span>
                       Headphones
                     </a>
                   </li>
@@ -125,9 +127,9 @@ const ProductSection = () => {
                       href="#"
                       className="text-blue-600 hover:underline flex items-center"
                     >
-                      <span className="mr-1">
+                      <span className="mr-2">
                         <FaTabletAlt />
-                      </span>{" "}
+                      </span>
                       Tablets
                     </a>
                   </li>
@@ -136,9 +138,9 @@ const ProductSection = () => {
                       href="#"
                       className="text-blue-600 hover:underline flex items-center"
                     >
-                      <span className="mr-1">
+                      <span className="mr-2">
                         <FaNetworkWired />
-                      </span>{" "}
+                      </span>
                       Networking
                     </a>
                   </li>
@@ -147,23 +149,24 @@ const ProductSection = () => {
                       href="#"
                       className="text-blue-600 hover:underline flex items-center"
                     >
-                      <span className="mr-1">
+                      <span className="mr-2">
                         <FaGamepad />
-                      </span>{" "}
+                      </span>
                       PC Gaming
                     </a>
                   </li>
                 </ul>
               </div>
+
               {/* Price Range Filter */}
-              <div className="mb-6">
-                <h3 className="text-sm font-semibold mb-2 flex items-center">
+              <div className="space-y-2">
+                <h3 className="text-sm font-semibold flex items-center">
                   <span className="mr-2">
                     <FaChevronRight />
-                  </span>{" "}
+                  </span>
                   Price Range
                 </h3>
-                <select className="w-full border border-gray-300 rounded px-3 py-2">
+                <select className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600">
                   <option value="">Select</option>
                   <option value="0-50">$0 - $50</option>
                   <option value="50-100">$50 - $100</option>
@@ -171,52 +174,50 @@ const ProductSection = () => {
                   <option value="200+">$200 and above</option>
                 </select>
               </div>
-              {/* Add more filters as needed */}
-              <button className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">
+
+              {/* Apply Filters Button */}
+              <button className="bg-blue-600 text-white w-full py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300">
                 Apply Filters
               </button>
             </div>
           </div>
 
           {/* Products Section */}
-          <div className="md:w-3/4 mt-4 md:mt-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {products.map((product, index) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 w-full">
+            {products.map((product) => (
               <div
-                key={index}
+                key={product.name}
                 className="bg-white p-4 rounded-lg shadow-md flex flex-col justify-between"
               >
                 <div>
-                  <div className="flex-shrink-0">
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="w-full h-48 object-cover mb-4 rounded-lg"
-                    />
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-48 object-cover mb-4 rounded-lg"
+                  />
+                  <h3 className="text-lg font-semibold line-clamp-2">
+                    {product.name}
+                  </h3>
+                  <div className="flex justify-between items-center mt-2">
+                    <p className="text-xl font-bold text-blue-600">
+                      {product.price}
+                    </p>
+                    <p className="text-gray-500 line-through">
+                      {product.oldPrice}
+                    </p>
                   </div>
-                  <div className="flex-grow">
-                    <h3 className="text-lg font-semibold mb-2">
-                      {product.name}
-                    </h3>
-                    <div className="flex justify-between items-center">
-                      <p className="text-xl font-bold text-blue-600">
-                        {product.price}
-                      </p>
-                      <p className="text-gray-500 line-through">
-                        {product.oldPrice}
-                      </p>
-                    </div>
-                    <div className="mt-2 px-2 py-1 bg-blue-200 text-blue-800 rounded-lg">
-                      {product.discount}
-                    </div>
+                  <div className="mt-2 px-2 py-1 bg-blue-200 text-blue-800 rounded-lg">
+                    {product.discount}
                   </div>
                 </div>
-                <div>
+                <div className="flex justify-between items-center mt-4">
                   <button
                     onClick={() => handleAddToCart(product.name)}
-                    className="mt-4 bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 self-start"
+                    className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-300"
                   >
                     Add to Cart
                   </button>
+                  <FaHeart className="text-red-500 cursor-pointer hover:text-red-700" />
                 </div>
               </div>
             ))}
@@ -227,4 +228,4 @@ const ProductSection = () => {
   );
 };
 
-export default ProductSection;
+export default Product;

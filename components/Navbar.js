@@ -12,25 +12,25 @@ const Navbar = () => {
   return (
     <nav className="bg-white shadow-md">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-        <div className="text-2xl font-bold">eTrade</div>
+        <div className="text-2xl font-bold">GizmoHub</div>
         <div className="hidden lg:flex items-center space-x-4">
-          <a href="#" className="text-gray-600 hover:text-blue-600">
+          <a href="/" className="text-gray-600 hover:text-blue-600">
             Home
           </a>
-          <a href="#" className="text-gray-600 hover:text-blue-600">
+          <a href="/product" className="text-gray-600 hover:text-blue-600">
             Shop
           </a>
-          <a href="#" className="text-gray-600 hover:text-blue-600">
+          <a href="/product" className="text-gray-600 hover:text-blue-600">
             Deals
           </a>
           <a href="#" className="text-gray-600 hover:text-blue-600">
             About
           </a>
-          <a href="#" className="text-gray-600 hover:text-blue-600">
+          <a href="/blog" className="text-gray-600 hover:text-blue-600">
             Blog
           </a>
-          <a href="#" className="text-gray-600 hover:text-blue-600">
-            Contact
+          <a href="/product/cart" className="text-gray-600 hover:text-blue-600">
+            Cart
           </a>
           <div className="relative">
             <input
@@ -59,23 +59,35 @@ const Navbar = () => {
       </div>
       {isOpen && (
         <div className="lg:hidden bg-white px-4 py-4">
-          <a href="#" className="block py-2 text-gray-600 hover:text-blue-600">
+          <a href="/" className="block py-2 text-gray-600 hover:text-blue-600">
             Home
           </a>
-          <a href="#" className="block py-2 text-gray-600 hover:text-blue-600">
+          <a
+            href="/product"
+            className="block py-2 text-gray-600 hover:text-blue-600"
+          >
             Shop
           </a>
-          <a href="#" className="block py-2 text-gray-600 hover:text-blue-600">
+          <a
+            href="/product"
+            className="block py-2 text-gray-600 hover:text-blue-600"
+          >
             Deals
           </a>
           <a href="#" className="block py-2 text-gray-600 hover:text-blue-600">
             About
           </a>
-          <a href="#" className="block py-2 text-gray-600 hover:text-blue-600">
+          <a
+            href="/blog"
+            className="block py-2 text-gray-600 hover:text-blue-600"
+          >
             Blog
           </a>
-          <a href="#" className="block py-2 text-gray-600 hover:text-blue-600">
-            Contact
+          <a
+            href="/product/cart"
+            className="block py-2 text-gray-600 hover:text-blue-600"
+          >
+            Cart
           </a>
           <div className="relative py-2">
             <input

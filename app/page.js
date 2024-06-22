@@ -27,9 +27,8 @@ export default function Home() {
     <div>
       <HeroSection />
       <CategorySection />
-      <ProductSection />
-      <ProductSectionSkeleton />
-      <ProductDetail product={product} />
+      <ProductSection title="Explore our Products" />
+      <ProductSection title="gaming electronics" />
     </div>
   );
 }
