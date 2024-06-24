@@ -1,8 +1,8 @@
 "use client";
-
 import React, { useState } from "react";
 
 const Checkout = () => {
+  const isDarkMode = true;
   const [shippingInfo, setShippingInfo] = useState({
     fullName: "",
     address: "",
@@ -37,12 +37,24 @@ const Checkout = () => {
   };
 
   return (
-    <div className="py-16 bg-gray-100 min-h-screen">
+    <div
+      className={`py-16 ${
+        isDarkMode ? "bg-gray-900" : "bg-gray-100"
+      } min-h-screen`}
+    >
       <div className="container mx-auto px-4 md:max-w-2xl lg:max-w-3xl">
-        <h2 className="text-3xl font-bold text-center mb-8">Checkout</h2>
+        <h2
+          className={`text-3xl font-bold text-center mb-8 ${
+            isDarkMode ? "text-white" : "text-gray-900"
+          }`}
+        >
+          Checkout
+        </h2>
         <form
           onSubmit={handleSubmit}
-          className="bg-white p-6 rounded-lg shadow-md space-y-8"
+          className={`bg-white p-6 rounded-lg shadow-md space-y-8 ${
+            isDarkMode ? "dark:bg-gray-800" : ""
+          }`}
         >
           {/* Shipping Information */}
           <div>
@@ -162,7 +174,11 @@ const Checkout = () => {
           {/* Order Summary */}
           <div>
             <h3 className="text-2xl font-semibold mb-4">Order Summary</h3>
-            <div className="bg-gray-100 p-4 rounded-lg shadow-inner">
+            <div
+              className={`bg-gray-100 p-4 rounded-lg shadow-inner ${
+                isDarkMode ? "dark:bg-gray-700" : ""
+              }`}
+            >
               <div className="flex justify-between items-center mb-2">
                 <span>Subtotal:</span>
                 <span>$139.97</span>
@@ -182,7 +198,9 @@ const Checkout = () => {
           <div className="flex justify-center">
             <button
               type="submit"
-              className="bg-green-600 text-white py-2 px-6 rounded-lg hover:bg-green-700 transition-colors duration-300"
+              className={`bg-green-600 text-white py-2 px-6 rounded-lg hover:bg-green-700 transition-colors duration-300 ${
+                isDarkMode ? "dark:bg-gray-600 dark:hover:bg-gray-700" : ""
+              }`}
             >
               Place Order
             </button>

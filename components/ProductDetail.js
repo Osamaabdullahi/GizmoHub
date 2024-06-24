@@ -1,9 +1,8 @@
 "use client";
-
 import React, { useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-const ProductDetailPage = ({ product }) => {
+const ProductDetailPage = ({ product, isDarkMode }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const handlePreviousImage = () => {
@@ -19,7 +18,11 @@ const ProductDetailPage = ({ product }) => {
   };
 
   return (
-    <div className="py-8  bg-gray-100 ">
+    <div
+      className={`py-8 ${
+        isDarkMode ? "bg-gray-800 text-white" : "bg-gray-100"
+      }`}
+    >
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row items-center">
           {/* Product Image */}
@@ -34,14 +37,18 @@ const ProductDetailPage = ({ product }) => {
               {/* Previous Image Button */}
               <button
                 onClick={handlePreviousImage}
-                className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white rounded-full p-2 shadow-md opacity-75 hover:opacity-100 focus:outline-none"
+                className={`absolute left-0 top-1/2 transform -translate-y-1/2 rounded-full p-2 shadow-md opacity-75 hover:opacity-100 focus:outline-none ${
+                  isDarkMode ? "bg-gray-600" : "bg-gray-800 text-white"
+                }`}
               >
                 <FaChevronLeft className="w-6 h-6" />
               </button>
               {/* Next Image Button */}
               <button
                 onClick={handleNextImage}
-                className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white rounded-full p-2 shadow-md opacity-75 hover:opacity-100 focus:outline-none"
+                className={`absolute right-0 top-1/2 transform -translate-y-1/2 rounded-full p-2 shadow-md opacity-75 hover:opacity-100 focus:outline-none ${
+                  isDarkMode ? "bg-gray-600" : "bg-gray-800 text-white"
+                }`}
               >
                 <FaChevronRight className="w-6 h-6" />
               </button>
@@ -66,17 +73,51 @@ const ProductDetailPage = ({ product }) => {
 
           {/* Product Details */}
           <div className="md:w-1/2 md:pl-8">
-            <h1 className="text-3xl font-semibold mb-4">{product.name}</h1>
+            <h1
+              className={`text-3xl font-semibold mb-4 ${
+                isDarkMode ? "text-white" : "text-gray-900"
+              }`}
+            >
+              {product.name}
+            </h1>
             <div className="flex justify-between items-center mb-4">
-              <p className="text-xl font-bold text-blue-600">{product.price}</p>
-              <p className="text-gray-500 line-through">{product.oldPrice}</p>
+              <p
+                className={`text-xl font-bold ${
+                  isDarkMode ? "text-blue-400" : "text-blue-600"
+                }`}
+              >
+                {product.price}
+              </p>
+              <p
+                className={`${
+                  isDarkMode ? "text-gray-300" : "text-gray-500"
+                } line-through`}
+              >
+                {product.oldPrice}
+              </p>
             </div>
-            <p className="text-lg mb-4">{product.description}</p>
+            <p
+              className={`${
+                isDarkMode ? "text-gray-300" : "text-gray-700"
+              } text-lg mb-4`}
+            >
+              {product.description}
+            </p>
             <div className="flex items-center space-x-4">
-              <button className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">
+              <button
+                className={`bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 ${
+                  isDarkMode ? "hover:bg-blue-500" : "hover:bg-blue-700"
+                }`}
+              >
                 Add to Cart
               </button>
-              <button className="bg-gray-200 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-300">
+              <button
+                className={`bg-gray-200 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-300 ${
+                  isDarkMode
+                    ? "hover:bg-gray-300 text-gray-900"
+                    : "hover:bg-gray-400"
+                }`}
+              >
                 Wishlist
               </button>
             </div>

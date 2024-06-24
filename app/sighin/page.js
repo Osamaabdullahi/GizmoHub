@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { FaGoogle, FaFacebookF } from "react-icons/fa";
 
 const Login = () => {
+  const isDarkMode = true;
   const [formData, setFormData] = useState({ email: "", password: "" });
 
   const handleChange = (e) => {
@@ -28,11 +29,15 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div
+      className={`min-h-screen flex items-center justify-center ${
+        isDarkMode ? "bg-gray-900 text-white" : "bg-gray-100"
+      } py-12 px-4 sm:px-6 lg:px-8`}
+    >
       <div className="max-w-sm w-full space-y-8">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Log in to your account
+          <h2 className="mt-6 text-center text-3xl font-extrabold">
+            {isDarkMode ? "Log in to your account" : "Log in to your account"}
           </h2>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
@@ -47,7 +52,11 @@ const Login = () => {
                 type="email"
                 autoComplete="email"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className={`appearance-none rounded-none relative block w-full px-3 py-2 border ${
+                  isDarkMode ? "border-gray-700 text-white" : "border-gray-300"
+                } placeholder-gray-500 ${
+                  isDarkMode ? "text-white" : "text-gray-900"
+                } rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm`}
                 placeholder="Email address"
                 value={formData.email}
                 onChange={handleChange}
@@ -63,7 +72,11 @@ const Login = () => {
                 type="password"
                 autoComplete="current-password"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className={`appearance-none rounded-none relative block w-full px-3 py-2 border ${
+                  isDarkMode ? "border-gray-700 text-white" : "border-gray-300"
+                } placeholder-gray-500 ${
+                  isDarkMode ? "text-white" : "text-gray-900"
+                } rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm`}
                 placeholder="Password"
                 value={formData.password}
                 onChange={handleChange}
@@ -100,7 +113,11 @@ const Login = () => {
           <div>
             <button
               type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className={`group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white ${
+                isDarkMode
+                  ? "bg-indigo-600 hover:bg-indigo-700 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  : "bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              }`}
             >
               Log in
             </button>
@@ -108,15 +125,31 @@ const Login = () => {
         </form>
 
         <div className="flex items-center justify-center mt-6">
-          <div className="w-full border-t border-gray-300"></div>
-          <span className="mx-4 text-gray-500">OR</span>
-          <div className="w-full border-t border-gray-300"></div>
+          <div
+            className={`w-full border-t border-gray-300 ${
+              isDarkMode ? "border-gray-700" : ""
+            }`}
+          ></div>
+          <span
+            className={`mx-4 ${isDarkMode ? "text-gray-500" : "text-gray-700"}`}
+          >
+            OR
+          </span>
+          <div
+            className={`w-full border-t border-gray-300 ${
+              isDarkMode ? "border-gray-700" : ""
+            }`}
+          ></div>
         </div>
 
         <div className="flex justify-between mt-6">
           <button
             onClick={handleGoogleLogin}
-            className="w-full flex items-center justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
+            className={`w-full flex items-center justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium ${
+              isDarkMode
+                ? "text-gray-700 hover:bg-gray-700 hover:text-white"
+                : "text-gray-700 hover:bg-gray-50"
+            }`}
           >
             <FaGoogle className="mr-2" />
             Log in with Google
@@ -125,7 +158,11 @@ const Login = () => {
         <div className="flex justify-between mt-4">
           <button
             onClick={handleFacebookLogin}
-            className="w-full flex items-center justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
+            className={`w-full flex items-center justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium ${
+              isDarkMode
+                ? "text-gray-700 hover:bg-gray-700 hover:text-white"
+                : "text-gray-700 hover:bg-gray-50"
+            }`}
           >
             <FaFacebookF className="mr-2" />
             Log in with Facebook

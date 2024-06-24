@@ -26,9 +26,9 @@ export default function Home() {
   return (
     <div>
       <HeroSection />
-      <CategorySection />
-      <ProductSection title="Explore our Products" />
-      <ProductSection title="gaming electronics" />
+      <CategorySection isDarkMode={true} />
+      <ProductSection title="Explore our Products" isDarkMode={true} />
+      <ProductSection title="Explore our Products" isDarkMode={false} />
     </div>
   );
 }

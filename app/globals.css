@@ -24,3 +24,18 @@
   transform: translateY(-20px);
   transition: opacity 300ms, transform 300ms;
 }
+
+@keyframes wave {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.wave-animation {
+  background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+  background-size: 200% 100%;
+  animation: wave 1.5s infinite;
+}
