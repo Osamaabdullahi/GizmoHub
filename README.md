@@ -1,6 +1,6 @@
 # GizmoHub
 
-![GizmoHub Logo](link_to_logo_image)
+**[Visit the website](https://gizmo-hub-g2mz-8u62a8fzi-abdullahis-projects-e4c012a2.vercel.app/)**
 
 GizmoHub is an electronics website built with Next.js, Tailwind CSS, and Django Rest Framework. It features a modern UI, seamless user experience, and integrates with a robust backend for managing products, carts, and orders.
 
