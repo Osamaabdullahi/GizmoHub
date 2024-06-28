@@ -10,7 +10,7 @@ const NotFoundPage = () => {
   const isDarkMode = useAppStore((state) => state.night);
 
   return (
-    <Suspense>
+    <Suspense fallback={<div>loading ...</div>}>
       <div
         className={`flex flex-col items-center justify-center min-h-screen ${
           isDarkMode ? "bg-gray-900" : "bg-gray-100"
