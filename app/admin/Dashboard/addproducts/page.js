@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 
-const page = () => {
+const Page = () => {
   const [product, setProduct] = useState({
     name: "",
     price: "",
@@ -185,4 +185,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

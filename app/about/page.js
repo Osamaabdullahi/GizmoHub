@@ -55,7 +55,7 @@ const About = () => {
                 className="w-full rounded-lg mb-4"
               />
               <h3 className="text-xl font-semibold">Jane Doe</h3>
-              <p className="text-gray-600">Founder & CEO</p>
+              <p className="text-gray-600">Founder and CEO</p>
             </div>
             <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 px-4 mb-8">
               <img
@@ -112,7 +112,7 @@ const About = () => {
                 "Great products, great prices, and fantastic customer support.
                 GizmoHub is my go-to for all my electronic needs."
               </p>
-              <h3 className="text-xl font-semibold">- Michael Smith</h3>
+              <h3 className="text-xl font-semibold">Michael Smith</h3>
             </div>
           </div>
         </section>

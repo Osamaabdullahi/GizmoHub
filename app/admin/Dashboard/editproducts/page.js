@@ -2,7 +2,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
 
-const page = () => {
+const Page = () => {
   const router = useRouter();
   const params = useSearchParams();
   console.log("%%%%", params);
@@ -174,4 +174,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

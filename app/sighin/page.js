@@ -78,13 +78,13 @@ const Login = () => {
             {isDarkMode ? "Log in to your account" : "Log in to your account"}
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Or{" "}
+            Or
             <Link
               href="/sighup"
               className="font-medium text-indigo-600 hover:text-indigo-500"
             >
               create new account
-            </Link>{" "}
+            </Link>
             if you don't have one.
           </p>
         </div>
