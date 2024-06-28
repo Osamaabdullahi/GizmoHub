@@ -17,6 +17,7 @@ import useCartStore, { useAppStore } from "@/store";
 import ProductCategorySkeleton from "@/components/skeletons/ProductCategorySkeleton";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Suspense } from "react";
 
 const Product = ({ searchParams }) => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -52,166 +53,168 @@ const Product = ({ searchParams }) => {
   };
 
   return (
-    <div className={`py-16 ${isDarkMode ? "bg-gray-900" : "bg-gray-100"}`}>
-      <div className="container mx-auto px-4">
-        <div className="flex flex-col md:flex-row">
-          {/* Redesigned Filter Section */}
-          <div
-            className={`${
-              isFilterOpen ? "block" : "hidden"
-            } md:block w-full md:w-1/5 bg-white h-[100%] p-4 rounded-lg shadow-md fixed md:sticky top-16 z-20 transition-all duration-300 ease-in-out ${
-              isDarkMode ? "dark:bg-gray-800" : ""
-            }`}
-          >
-            <div className="flex justify-between items-center mb-4 md:hidden">
-              <h2
-                className={`text-lg font-semibold ${
-                  isDarkMode ? "text-white" : "text-gray-800"
-                }`}
-              >
-                Filter By
-              </h2>
-              <button
-                onClick={toggleFilter}
-                className={`text-blue-600 hover:text-blue-700 ${
-                  isDarkMode ? "text-white" : "text-gray-800"
-                }`}
-              >
-                {isFilterOpen ? <FaChevronUp /> : <FaChevronDown />}
-              </button>
-            </div>
-
-            <div className="space-y-6">
-              {/* Category Filter */}
-              <div className="space-y-4">
-                <h3
-                  className={`text-sm font-semibold flex items-center ${
+    <Suspense>
+      <div className={`py-16 ${isDarkMode ? "bg-gray-900" : "bg-gray-100"}`}>
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row">
+            {/* Redesigned Filter Section */}
+            <div
+              className={`${
+                isFilterOpen ? "block" : "hidden"
+              } md:block w-full md:w-1/5 bg-white h-[100%] p-4 rounded-lg shadow-md fixed md:sticky top-16 z-20 transition-all duration-300 ease-in-out ${
+                isDarkMode ? "dark:bg-gray-800" : ""
+              }`}
+            >
+              <div className="flex justify-between items-center mb-4 md:hidden">
+                <h2
+                  className={`text-lg font-semibold ${
                     isDarkMode ? "text-white" : "text-gray-800"
                   }`}
                 >
-                  <span className="mr-2">
-                    <FaMobileAlt />
-                  </span>
-                  Categories
-                </h3>
-                <ul className="space-y-2">
-                  <li>
-                    <span
-                      onClick={() => filter("Laptops")}
-                      className={`flex items-center cursor-pointer ${
-                        isDarkMode ? "text-white" : "text-gray-800"
-                      } hover:underline`}
-                    >
-                      <span className="mr-2">
-                        <FaLaptop />
-                      </span>
-                      Laptops
-                    </span>
-                  </li>
-                  <li>
-                    <span
-                      onClick={() => filter("Headphones")}
-                      className={`flex items-center cursor-pointer ${
-                        isDarkMode ? "text-white" : "text-gray-800"
-                      } hover:underline`}
-                    >
-                      <span className="mr-2">
-                        <FaHeadphones />
-                      </span>
-                      Headphones
-                    </span>
-                  </li>
-                  <li>
-                    <span
-                      onClick={() => filter("Tablets")}
-                      className={`flex items-center cursor-pointer ${
-                        isDarkMode ? "text-white" : "text-gray-800"
-                      } hover:underline`}
-                    >
-                      <span className="mr-2">
-                        <FaTabletAlt />
-                      </span>
-                      Tablets
-                    </span>
-                  </li>
-                  <li>
-                    <span
-                      onClick={() => filter("Networking")}
-                      className={`flex items-center cursor-pointer ${
-                        isDarkMode ? "text-white" : "text-gray-800"
-                      } hover:underline`}
-                    >
-                      <span className="mr-2">
-                        <FaNetworkWired />
-                      </span>
-                      Networking
-                    </span>
-                  </li>
-                  <li>
-                    <span
-                      onClick={() => filter("PC Gaming")}
-                      className={`flex items-center cursor-pointer ${
-                        isDarkMode ? "text-white" : "text-gray-800"
-                      } hover:underline`}
-                    >
-                      <span className="mr-2">
-                        <FaGamepad />
-                      </span>
-                      PC Gaming
-                    </span>
-                  </li>
-                </ul>
-              </div>
-
-              {/* Price Range Filter */}
-              <div className="space-y-2">
-                <h3
-                  className={`text-sm font-semibold flex items-center ${
+                  Filter By
+                </h2>
+                <button
+                  onClick={toggleFilter}
+                  className={`text-blue-600 hover:text-blue-700 ${
                     isDarkMode ? "text-white" : "text-gray-800"
                   }`}
                 >
-                  <span className="mr-2">
-                    <FaChevronRight />
-                  </span>
-                  Price Range
-                </h3>
-                <select
-                  className={`w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 ${
-                    isDarkMode ? "bg-gray-800 text-white" : ""
-                  }`}
-                >
-                  <option value="">Select</option>
-                  <option value="0-50">$0 - $50</option>
-                  <option value="50-100">$50 - $100</option>
-                  <option value="100-200">$100 - $200</option>
-                  <option value="200+">$200 and above</option>
-                </select>
+                  {isFilterOpen ? <FaChevronUp /> : <FaChevronDown />}
+                </button>
               </div>
 
-              {/* Apply Filters Button */}
-              <button
-                onClick={() => filter()}
-                className={`bg-blue-600 text-white w-full py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300 ${
-                  isDarkMode ? "dark:bg-gray-700" : ""
-                }`}
-              >
-                Apply Filters
-              </button>
-            </div>
-          </div>
+              <div className="space-y-6">
+                {/* Category Filter */}
+                <div className="space-y-4">
+                  <h3
+                    className={`text-sm font-semibold flex items-center ${
+                      isDarkMode ? "text-white" : "text-gray-800"
+                    }`}
+                  >
+                    <span className="mr-2">
+                      <FaMobileAlt />
+                    </span>
+                    Categories
+                  </h3>
+                  <ul className="space-y-2">
+                    <li>
+                      <span
+                        onClick={() => filter("Laptops")}
+                        className={`flex items-center cursor-pointer ${
+                          isDarkMode ? "text-white" : "text-gray-800"
+                        } hover:underline`}
+                      >
+                        <span className="mr-2">
+                          <FaLaptop />
+                        </span>
+                        Laptops
+                      </span>
+                    </li>
+                    <li>
+                      <span
+                        onClick={() => filter("Headphones")}
+                        className={`flex items-center cursor-pointer ${
+                          isDarkMode ? "text-white" : "text-gray-800"
+                        } hover:underline`}
+                      >
+                        <span className="mr-2">
+                          <FaHeadphones />
+                        </span>
+                        Headphones
+                      </span>
+                    </li>
+                    <li>
+                      <span
+                        onClick={() => filter("Tablets")}
+                        className={`flex items-center cursor-pointer ${
+                          isDarkMode ? "text-white" : "text-gray-800"
+                        } hover:underline`}
+                      >
+                        <span className="mr-2">
+                          <FaTabletAlt />
+                        </span>
+                        Tablets
+                      </span>
+                    </li>
+                    <li>
+                      <span
+                        onClick={() => filter("Networking")}
+                        className={`flex items-center cursor-pointer ${
+                          isDarkMode ? "text-white" : "text-gray-800"
+                        } hover:underline`}
+                      >
+                        <span className="mr-2">
+                          <FaNetworkWired />
+                        </span>
+                        Networking
+                      </span>
+                    </li>
+                    <li>
+                      <span
+                        onClick={() => filter("PC Gaming")}
+                        className={`flex items-center cursor-pointer ${
+                          isDarkMode ? "text-white" : "text-gray-800"
+                        } hover:underline`}
+                      >
+                        <span className="mr-2">
+                          <FaGamepad />
+                        </span>
+                        PC Gaming
+                      </span>
+                    </li>
+                  </ul>
+                </div>
 
-          {/* Products Section */}
-          <div className="w-full mt-4 md:ml-4 md:w-4/5">
-            {loading ? (
-              <ProductCategorySkeleton />
-            ) : (
-              <ProductPage data={data} isDarkMode={isDarkMode} />
-            )}
+                {/* Price Range Filter */}
+                <div className="space-y-2">
+                  <h3
+                    className={`text-sm font-semibold flex items-center ${
+                      isDarkMode ? "text-white" : "text-gray-800"
+                    }`}
+                  >
+                    <span className="mr-2">
+                      <FaChevronRight />
+                    </span>
+                    Price Range
+                  </h3>
+                  <select
+                    className={`w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 ${
+                      isDarkMode ? "bg-gray-800 text-white" : ""
+                    }`}
+                  >
+                    <option value="">Select</option>
+                    <option value="0-50">$0 - $50</option>
+                    <option value="50-100">$50 - $100</option>
+                    <option value="100-200">$100 - $200</option>
+                    <option value="200+">$200 and above</option>
+                  </select>
+                </div>
+
+                {/* Apply Filters Button */}
+                <button
+                  onClick={() => filter()}
+                  className={`bg-blue-600 text-white w-full py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300 ${
+                    isDarkMode ? "dark:bg-gray-700" : ""
+                  }`}
+                >
+                  Apply Filters
+                </button>
+              </div>
+            </div>
+
+            {/* Products Section */}
+            <div className="w-full mt-4 md:ml-4 md:w-4/5">
+              {loading ? (
+                <ProductCategorySkeleton />
+              ) : (
+                <ProductPage data={data} isDarkMode={isDarkMode} />
+              )}
+            </div>
           </div>
         </div>
+        <ToastContainer />
       </div>
-      <ToastContainer />
-    </div>
+    </Suspense>
   );
 };
 
