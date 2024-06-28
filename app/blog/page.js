@@ -1,8 +1,9 @@
 "use client";
 import React from "react";
+import { useAppStore } from "@/store";
 
 const Blog = () => {
-  const isDarkMode = true;
+  const isDarkMode = useAppStore((state) => state.night);
   const blogPosts = [
     {
       id: 1,

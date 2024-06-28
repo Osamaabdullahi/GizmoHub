@@ -1,8 +1,28 @@
 "use client";
 import React, { useState } from "react";
+import useCartStore, { useAppStore, useAuthStore } from "@/store";
+import ThankYouModal from "@/components/ThankYouModal";
+import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
+import { useLayoutEffect } from "react";
 
 const Checkout = () => {
-  const isDarkMode = true;
+  const isAuth = useAuthStore((state) => state.isLoggedIn);
+
+  useLayoutEffect(() => {
+    if (!isAuth) {
+      redirect("/sighup");
+    }
+  }, []);
+
+  const router = useRouter();
+  const isDarkMode = useAppStore((state) => state.night);
+  const totalAmount = useCartStore((state) => state.totalAmount);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const cartObjects = useCartStore((state) => state.cart);
+  const clearCart = useCartStore((state) => state.clearCart);
+  const user = useAuthStore((state) => state.user);
+  const [Loading, setLoading] = useState(false);
   const [shippingInfo, setShippingInfo] = useState({
     fullName: "",
     address: "",
@@ -33,7 +53,47 @@ const Checkout = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Process checkout
-    alert("Checkout processed!");
+    handleOrderPlaced();
+  };
+
+  const handleOrderPlaced = () => {
+    setLoading(true);
+    setIsModalOpen(true);
+    for (let key in cartObjects) {
+      placeOrders(
+        cartObjects[key].quantity,
+        cartObjects[key].total,
+        user.user_id,
+        cartObjects[key].id
+      );
+    }
+    setLoading(false);
+    clearCart();
+    // router.push("product");
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    router.push("/product");
+  };
+
+  const placeOrders = async (quantity, total_price, user, product) => {
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/orderditems/`;
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        quantity,
+        total_price,
+        user,
+        product,
+      }),
+    });
+    const result = await response.json();
   };
 
   return (
@@ -181,7 +241,7 @@ const Checkout = () => {
             >
               <div className="flex justify-between items-center mb-2">
                 <span>Subtotal:</span>
-                <span>$139.97</span>
+                <span>{totalAmount}</span>
               </div>
               <div className="flex justify-between items-center mb-2">
                 <span>Shipping:</span>
@@ -189,7 +249,7 @@ const Checkout = () => {
               </div>
               <div className="flex justify-between items-center font-bold text-lg">
                 <span>Total:</span>
-                <span>$149.97</span>
+                <span>{totalAmount + 10}</span>
               </div>
             </div>
           </div>
@@ -197,13 +257,15 @@ const Checkout = () => {
           {/* Submit Button */}
           <div className="flex justify-center">
             <button
-              type="submit"
+              onClick={handleOrderPlaced}
+              type="button"
               className={`bg-green-600 text-white py-2 px-6 rounded-lg hover:bg-green-700 transition-colors duration-300 ${
                 isDarkMode ? "dark:bg-gray-600 dark:hover:bg-gray-700" : ""
               }`}
             >
               Place Order
             </button>
+            <ThankYouModal isOpen={isModalOpen} onRequestClose={closeModal} />
           </div>
         </form>
       </div>

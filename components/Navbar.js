@@ -1,188 +1,103 @@
-// "use client"; // components/Navbar.js
-// import { useState } from "react";
-// import { FaSearch, FaBars, FaTimes } from "react-icons/fa";
-
-// const Navbar = () => {
-//   const [isOpen, setIsOpen] = useState(false);
-
-//   const toggleMenu = () => {
-//     setIsOpen(!isOpen);
-//   };
-
-//   return (
-//     <nav className="bg-white shadow-md">
-//       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-//         <div className="text-2xl font-bold">GizmoHub</div>
-//         <div className="hidden lg:flex items-center space-x-4">
-//           <a href="/" className="text-gray-600 hover:text-blue-600">
-//             Home
-//           </a>
-//           <a href="/product" className="text-gray-600 hover:text-blue-600">
-//             Shop
-//           </a>
-//           <a href="/product" className="text-gray-600 hover:text-blue-600">
-//             Deals
-//           </a>
-//           <a href="#" className="text-gray-600 hover:text-blue-600">
-//             About
-//           </a>
-//           <a href="/blog" className="text-gray-600 hover:text-blue-600">
-//             Blog
-//           </a>
-//           <a href="/product/cart" className="text-gray-600 hover:text-blue-600">
-//             Cart
-//           </a>
-//           <div className="relative">
-//             <input
-//               type="text"
-//               className="border border-gray-300 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
-//               placeholder="Search..."
-//             />
-//             <FaSearch className="absolute top-2 left-3 text-gray-400" />
-//           </div>
-//           <button className="px-4 py-2 bg-blue-600 text-white rounded-lg">
-//             Login
-//           </button>
-//         </div>
-//         <div className="lg:hidden flex items-center">
-//           <button
-//             onClick={toggleMenu}
-//             className="text-gray-600 focus:outline-none"
-//           >
-//             {isOpen ? (
-//               <FaTimes className="text-2xl" />
-//             ) : (
-//               <FaBars className="text-2xl" />
-//             )}
-//           </button>
-//         </div>
-//       </div>
-//       {isOpen && (
-//         <div className="lg:hidden bg-white px-4 py-4">
-//           <a href="/" className="block py-2 text-gray-600 hover:text-blue-600">
-//             Home
-//           </a>
-//           <a
-//             href="/product"
-//             className="block py-2 text-gray-600 hover:text-blue-600"
-//           >
-//             Shop
-//           </a>
-//           <a
-//             href="/product"
-//             className="block py-2 text-gray-600 hover:text-blue-600"
-//           >
-//             Deals
-//           </a>
-//           <a href="#" className="block py-2 text-gray-600 hover:text-blue-600">
-//             About
-//           </a>
-//           <a
-//             href="/blog"
-//             className="block py-2 text-gray-600 hover:text-blue-600"
-//           >
-//             Blog
-//           </a>
-//           <a
-//             href="/product/cart"
-//             className="block py-2 text-gray-600 hover:text-blue-600"
-//           >
-//             Cart
-//           </a>
-//           <div className="relative py-2">
-//             <input
-//               type="text"
-//               className="border border-gray-300 rounded-lg pl-10 pr-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-600"
-//               placeholder="Search..."
-//             />
-//             <FaSearch className="absolute top-3 left-4 text-gray-400" />
-//           </div>
-//           <button className="w-full mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg">
-//             Login
-//           </button>
-//         </div>
-//       )}
-//     </nav>
-//   );
-// };
-
-// export default Navbar;
-
-"use client"; // components/Navbar.js
-import { useState } from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import { FaSearch, FaBars, FaTimes, FaSun, FaMoon } from "react-icons/fa";
+import useCartStore, { useAppStore, useAuthStore } from "@/store";
+import Link from "next/link";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import Image from "next/image";
 
 const Navbar = () => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const user = useAuthStore((state) => state.user);
+  const isAdmin = user ? user.admin : false;
+  const isDarkMode = useAppStore((state) => state.night);
+  const setNight = useAppStore((state) => state.setNight);
   const [isOpen, setIsOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false); // State for dark mode
+  const cartItems = useCartStore((state) => state.cart);
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const [mounted, setMounted] = useState(false);
+  const searchParams = useSearchParams();
+  const { replace } = useRouter();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
   const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode); // Toggle dark mode state
+    setNight();
   };
+
+  const linkStyle = (path) => {
+    return `py-2 px-3 rounded ${
+      pathname === path
+        ? isDarkMode
+          ? "bg-gray-700 text-white"
+          : "bg-blue-600 text-white"
+        : isDarkMode
+        ? "text-white hover:text-blue-600"
+        : "text-black hover:text-blue-600"
+    }`;
+  };
+
+  function handleSearch(term) {
+    const params = new URLSearchParams(searchParams);
+    if (term) {
+      params.set("query", term);
+    } else {
+      params.delete("query");
+    }
+    // replace(`${pathname}?${params.toString()}`);
+    replace(`/product?${params.toString()}`);
+  }
+
+  if (!mounted) {
+    // Render nothing on the server to avoid mismatches
+    return null;
+  }
 
   return (
     <nav className={`bg-${isDarkMode ? "gray-800" : "white"} shadow-md`}>
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         <div
-          className={`text-2xl font-bold text-${
+          onClick={() => router.push("/")}
+          className={`text-2xl cursor-pointer font-bold text-${
             isDarkMode ? "white" : "gray-800"
           }`}
         >
           GizmoHub
         </div>
         <div className="hidden lg:flex items-center space-x-4">
-          <a
-            href="/"
-            className={`text-${
-              isDarkMode ? "white" : "black"
-            } hover:text-blue-600`}
-          >
+          <Link href="/" className={linkStyle("/")}>
             Home
-          </a>
-          <a
-            href="/product"
-            className={`text-${
-              isDarkMode ? "white" : "black"
-            } hover:text-blue-600`}
-          >
+          </Link>
+          <Link href="/product" className={linkStyle("/product")}>
             Shop
-          </a>
-          <a
-            href="/product"
-            className={`text-${
-              isDarkMode ? "white" : "black"
-            } hover:text-blue-600`}
-          >
-            Deals
-          </a>
-          <a
-            href="#"
-            className={`text-${
-              isDarkMode ? "white" : "black"
-            } hover:text-blue-600`}
-          >
+          </Link>
+          <Link href="/about" className={linkStyle("/about")}>
             About
-          </a>
-          <a
-            href="/blog"
-            className={`text-${
-              isDarkMode ? "white" : "black"
-            } hover:text-blue-600`}
-          >
+          </Link>
+          <Link href="/blog" className={linkStyle("/blog")}>
             Blog
-          </a>
-          <a
+          </Link>
+          {isAdmin && (
+            <Link href="/admin/Dashboard" className={linkStyle("/admin")}>
+              Admin
+            </Link>
+          )}
+          <Link
             href="/product/cart"
-            className={`text-${
-              isDarkMode ? "white" : "black"
-            } hover:text-blue-600`}
+            className={`relative ${linkStyle("/product/cart")}`}
           >
             Cart
-          </a>
+            <sup className="absolute -top-2 right-0 bg-red-600 text-white rounded-full text-xs px-1">
+              {cartItems.length}
+            </sup>
+          </Link>
           <div className="relative">
             <input
               type="text"
@@ -192,16 +107,34 @@ const Navbar = () => {
                 isDarkMode ? "white" : "black"
               }`}
               placeholder="Search..."
+              onChange={(e) => {
+                handleSearch(e.target.value);
+              }}
+              defaultValue={searchParams.get("query")?.toString()}
             />
             <FaSearch className="absolute top-2 left-3 text-gray-400" />
           </div>
-          <button
-            className={`px-4 py-2 rounded-lg ${
-              isDarkMode ? "bg-gray-700 text-white" : "bg-blue-600 text-white"
-            } hover:bg-blue-700 focus:outline-none`}
-          >
-            Login
-          </button>
+          {isLoggedIn ? (
+            <div className="relative">
+              <Image
+                src="/images/controller.jpg"
+                alt="Profile Avatar"
+                className="w-10 h-10 rounded-full cursor-pointer"
+                onClick={() => router.push("/profile")}
+                width={100}
+                height={100}
+              />
+            </div>
+          ) : (
+            <button
+              onClick={() => router.push("sighin")}
+              className={`px-4 py-2 rounded-lg ${
+                isDarkMode ? "bg-gray-700 text-white" : "bg-blue-600 text-white"
+              } hover:bg-blue-700 focus:outline-none`}
+            >
+              Login
+            </button>
+          )}
           <button
             onClick={toggleDarkMode}
             className={`px-4 py-2 rounded-lg ${
@@ -232,54 +165,35 @@ const Navbar = () => {
             isDarkMode ? "gray-800" : "white"
           } px-4 py-4`}
         >
-          <a
-            href="/"
-            className={`block py-2 text-${
-              isDarkMode ? "white" : "black"
-            } hover:text-blue-600`}
-          >
+          <Link href="/" className={`block ${linkStyle("/")}`}>
             Home
-          </a>
-          <a
-            href="/product"
-            className={`block py-2 text-${
-              isDarkMode ? "white" : "black"
-            } hover:text-blue-600`}
-          >
+          </Link>
+          <Link href="/product" className={`block ${linkStyle("/product")}`}>
             Shop
-          </a>
-          <a
-            href="/product"
-            className={`block py-2 text-${
-              isDarkMode ? "white" : "black"
-            } hover:text-blue-600`}
-          >
-            Deals
-          </a>
-          <a
-            href="#"
-            className={`block py-2 text-${
-              isDarkMode ? "white" : "black"
-            } hover:text-blue-600`}
-          >
+          </Link>
+          <Link href="/about" className={`block ${linkStyle("/about")}`}>
             About
-          </a>
-          <a
-            href="/blog"
-            className={`block py-2 text-${
-              isDarkMode ? "white" : "black"
-            } hover:text-blue-600`}
-          >
+          </Link>
+          <Link href="/blog" className={`block ${linkStyle("/blog")}`}>
             Blog
-          </a>
-          <a
+          </Link>
+          {isAdmin && (
+            <Link
+              href="/admin/Dashboard"
+              className={`block ${linkStyle("/admin")}`}
+            >
+              Admin
+            </Link>
+          )}
+          <Link
             href="/product/cart"
-            className={`block py-2 text-${
-              isDarkMode ? "white" : "black"
-            } hover:text-blue-600`}
+            className={`block relative ${linkStyle("/product/cart")}`}
           >
             Cart
-          </a>
+            <sup className="absolute -top-2 right-0 bg-red-600 text-white rounded-full text-xs px-1">
+              {cartItems.length}
+            </sup>
+          </Link>
           <div className="relative py-2">
             <input
               type="text"
@@ -289,16 +203,36 @@ const Navbar = () => {
                 isDarkMode ? "white" : "black"
               }`}
               placeholder="Search..."
+              onChange={(e) => {
+                handleSearch(e.target.value);
+              }}
+              defaultValue={searchParams.get("query")?.toString()}
             />
             <FaSearch className="absolute top-3 left-4 text-gray-400" />
           </div>
-          <button
-            className={`w-full mt-2 px-4 py-2 ${
-              isDarkMode ? "bg-gray-700 text-white" : "bg-blue-600 text-white"
-            } rounded-lg`}
-          >
-            Login
-          </button>
+          {isLoggedIn ? (
+            <div className="w-full mt-2">
+              <button
+                onClick={() => router.push("/profile")}
+                className={`w-full px-4 py-2 ${
+                  isDarkMode
+                    ? "bg-gray-700 text-white"
+                    : "bg-blue-600 text-white"
+                } rounded-lg`}
+              >
+                Profile
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => router.push("sighin")}
+              className={`w-full mt-2 px-4 py-2 ${
+                isDarkMode ? "bg-gray-700 text-white" : "bg-blue-600 text-white"
+              } rounded-lg`}
+            >
+              Login
+            </button>
+          )}
         </div>
       )}
     </nav>

@@ -2,17 +2,28 @@
 import React, { useEffect, useState } from "react";
 import { FaHeart } from "react-icons/fa";
 import ProductSectionSkeleton from "./skeletons/ProductSectionSkeleton";
+import { useRouter } from "next/navigation";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import useCartStore, { useAppStore } from "@/store";
 
-const ProductSection = ({ title, isDarkMode }) => {
+const ProductSection = ({ title }) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
+  const isDarkMode = useAppStore((state) => state.night);
+  const addItem = useCartStore((state) => state.addItem);
+
+  const handleAddToCart = (name, id, image, price) => {
+    const item = { id, name, price, image, quantity: 1 };
+    addItem(item);
+    toast.success(`${name} added to cart!`);
+  };
 
   const fetchData = async () => {
-    const url = "http://127.0.0.1:8000/products/";
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/products`;
     const response = await fetch(url);
     const result = await response.json();
-    console.log(response);
-    console.log(result);
     if (response.ok) {
       setData(result);
       setLoading(false);
@@ -22,6 +33,11 @@ const ProductSection = ({ title, isDarkMode }) => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const handleClick = (id, name) => {
+    const params = new URLSearchParams({ id: id });
+    router.push(`/product/${name}?${params.toString()}`);
+  };
 
   if (loading) {
     return <ProductSectionSkeleton />;
@@ -41,11 +57,14 @@ const ProductSection = ({ title, isDarkMode }) => {
           {data?.map((product) => (
             <div
               key={product.name}
-              className={`bg-white p-4 rounded-lg shadow-md flex flex-col justify-between ${
+              className={`bg-white p-4 rounded-lg shadow-md flex flex-col justify-between transition-transform duration-300 ease-in-out transform hover:scale-105 ${
                 isDarkMode ? "dark:bg-gray-700 dark:text-white" : ""
               }`}
             >
-              <div>
+              <div
+                onClick={() => handleClick(product.id, product.name)}
+                className="cursor-pointer"
+              >
                 <img
                   src={product.image}
                   alt={product.name}
@@ -72,12 +91,21 @@ const ProductSection = ({ title, isDarkMode }) => {
               </div>
               <div className="flex justify-between items-center mt-4">
                 <button
-                  className={`bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 ${
+                  onClick={() =>
+                    handleAddToCart(
+                      product.name,
+                      product.id,
+                      product.image,
+                      product.price
+                    )
+                  }
+                  className={`bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-300 ${
                     isDarkMode ? "dark:bg-gray-600" : ""
                   }`}
                 >
                   Add to Cart
                 </button>
+
                 <FaHeart
                   className={`text-red-500 cursor-pointer hover:text-red-700 ${
                     isDarkMode ? "dark:text-red-400 hover:text-red-600" : ""
@@ -88,6 +116,7 @@ const ProductSection = ({ title, isDarkMode }) => {
           ))}
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# GizmoHub
 
-## Getting Started
+![GizmoHub Logo](link_to_logo_image)
 
-First, run the development server:
+GizmoHub is an electronics website built with Next.js, Tailwind CSS, and Django Rest Framework. It features a modern UI, seamless user experience, and integrates with a robust backend for managing products, carts, and orders.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Table of Contents
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- [Overview](#overview)
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Setup](#setup)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Usage](#usage)
+  - [Running the Development Server](#running-the-development-server)
+  - [Admin Dashboard](#admin-dashboard)
+- [Pages and Paths](#pages-and-paths)
+- [Contributing](#contributing)
+- [License](#license)
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Overview
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+GizmoHub is designed as a comprehensive electronics website offering a wide range of products, smooth shopping cart functionality, secure checkout processes, and engaging content through an about page and a blog.
 
-## Learn More
+## Features
 
-To learn more about Next.js, take a look at the following resources:
+- **Product Listings**: Explore a variety of electronics products.
+- **Shopping Cart**: Add products to the cart for easy checkout.
+- **Secure Checkout**: Seamless and secure payment processing.
+- **Admin Dashboard**: Manage website content and track orders efficiently.
+- **Dynamic Pages**: About page and blog page for engaging content.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Technologies Used
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- **Frontend**: Next.js, React Icons, Lottie Animation
+- **Styling**: Tailwind CSS
+- **Backend**: Django Rest Framework
+- **Database**: PostgreSQL or SQLite
 
-## Deploy on Vercel
+## Setup
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Prerequisites
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- Node.js and npm installed on your system.
+- Python 3.x and Pipenv or virtualenv for Python environment management.
+- PostgreSQL or SQLite database instance.
+
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/your_username/gizmohub.git
+   cd gizmohub
+   ```

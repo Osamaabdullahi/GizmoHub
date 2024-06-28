@@ -1,6 +1,4 @@
 "use client";
-import ProductSection from "@/components/ProductSection";
-import ProductSectionSkeleton from "@/components/skeletons/ProductSectionSkeleton";
 import React, { useEffect, useState } from "react";
 import {
   FaMobileAlt,
@@ -14,23 +12,27 @@ import {
   FaChevronRight,
   FaHeart,
 } from "react-icons/fa";
+import { useRouter } from "next/navigation";
+import useCartStore, { useAppStore } from "@/store";
 import ProductCategorySkeleton from "@/components/skeletons/ProductCategorySkeleton";
-import { useSearchParams, useRouter } from "next/navigation";
-import Link from "next/link";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const Product = () => {
+const Product = ({ searchParams }) => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const isDarkMode = true;
-
+  const isDarkMode = useAppStore((state) => state.night);
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [category, setcategory] = useState("");
+  const query = searchParams?.query || "";
 
   const fetchData = async () => {
-    const url = "http://127.0.0.1:8000/products/";
+    if (!query === "") {
+      const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/products/?name=${query}`;
+    }
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/products/?category=${category}`;
     const response = await fetch(url);
     const result = await response.json();
-    console.log(response);
-    console.log(result);
     if (response.ok) {
       setData(result);
       setLoading(false);
@@ -39,18 +41,14 @@ const Product = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
-
-  // if (loading) {
-  //   return <ProductSectionSkeleton />;
-  // }
+  }, [query]);
 
   const toggleFilter = () => {
     setIsFilterOpen(!isFilterOpen);
   };
-
-  const handleAddToCart = (productName) => {
-    alert(`Added ${productName} to cart!`); // Replace with actual add to cart functionality
+  const filter = (cat) => {
+    setcategory(cat);
+    fetchData();
   };
 
   return (
@@ -98,9 +96,9 @@ const Product = () => {
                 </h3>
                 <ul className="space-y-2">
                   <li>
-                    <a
-                      href="#"
-                      className={`flex items-center ${
+                    <span
+                      onClick={() => filter("Laptops")}
+                      className={`flex items-center cursor-pointer ${
                         isDarkMode ? "text-white" : "text-gray-800"
                       } hover:underline`}
                     >
@@ -108,12 +106,12 @@ const Product = () => {
                         <FaLaptop />
                       </span>
                       Laptops
-                    </a>
+                    </span>
                   </li>
                   <li>
-                    <a
-                      href="#"
-                      className={`flex items-center ${
+                    <span
+                      onClick={() => filter("Headphones")}
+                      className={`flex items-center cursor-pointer ${
                         isDarkMode ? "text-white" : "text-gray-800"
                       } hover:underline`}
                     >
@@ -121,12 +119,12 @@ const Product = () => {
                         <FaHeadphones />
                       </span>
                       Headphones
-                    </a>
+                    </span>
                   </li>
                   <li>
-                    <a
-                      href="#"
-                      className={`flex items-center ${
+                    <span
+                      onClick={() => filter("Tablets")}
+                      className={`flex items-center cursor-pointer ${
                         isDarkMode ? "text-white" : "text-gray-800"
                       } hover:underline`}
                     >
@@ -134,12 +132,12 @@ const Product = () => {
                         <FaTabletAlt />
                       </span>
                       Tablets
-                    </a>
+                    </span>
                   </li>
                   <li>
-                    <a
-                      href="#"
-                      className={`flex items-center ${
+                    <span
+                      onClick={() => filter("Networking")}
+                      className={`flex items-center cursor-pointer ${
                         isDarkMode ? "text-white" : "text-gray-800"
                       } hover:underline`}
                     >
@@ -147,12 +145,12 @@ const Product = () => {
                         <FaNetworkWired />
                       </span>
                       Networking
-                    </a>
+                    </span>
                   </li>
                   <li>
-                    <a
-                      href="#"
-                      className={`flex items-center ${
+                    <span
+                      onClick={() => filter("PC Gaming")}
+                      className={`flex items-center cursor-pointer ${
                         isDarkMode ? "text-white" : "text-gray-800"
                       } hover:underline`}
                     >
@@ -160,7 +158,7 @@ const Product = () => {
                         <FaGamepad />
                       </span>
                       PC Gaming
-                    </a>
+                    </span>
                   </li>
                 </ul>
               </div>
@@ -192,6 +190,7 @@ const Product = () => {
 
               {/* Apply Filters Button */}
               <button
+                onClick={() => filter()}
                 className={`bg-blue-600 text-white w-full py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300 ${
                   isDarkMode ? "dark:bg-gray-700" : ""
                 }`}
@@ -202,13 +201,16 @@ const Product = () => {
           </div>
 
           {/* Products Section */}
-          {loading ? (
-            <ProductCategorySkeleton />
-          ) : (
-            <ProductPage data={data} isDarkMode={true} />
-          )}
+          <div className="w-full mt-4 md:ml-4 md:w-4/5">
+            {loading ? (
+              <ProductCategorySkeleton />
+            ) : (
+              <ProductPage data={data} isDarkMode={isDarkMode} />
+            )}
+          </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };
@@ -216,22 +218,33 @@ const Product = () => {
 export default Product;
 
 const ProductPage = ({ isDarkMode, data }) => {
+  const addItem = useCartStore((state) => state.addItem);
   const router = useRouter();
+
   const handleClick = (id, name) => {
     const params = new URLSearchParams({ id: id });
     router.push(`/product/${name}?${params.toString()}`);
   };
+
+  const handleAddToCart = (name, id, image, price) => {
+    const item = { id, name, price, image, quantity: 1 };
+    addItem(item);
+    toast.success(`${name} added to cart!`);
+  };
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full ml-4 ">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {data?.map((product) => (
         <div
-          onClick={() => handleClick(product.id, product.name)}
           key={product.name}
-          className={`bg-white p-4 rounded-lg shadow-md flex flex-col justify-between cursor-pointer ${
+          className={`bg-white p-4 rounded-lg shadow-md flex flex-col justify-between transition-transform duration-300 ease-in-out transform hover:scale-105 ${
             isDarkMode ? "dark:bg-gray-800 dark:text-white" : ""
           }`}
         >
-          <div>
+          <div
+            onClick={() => handleClick(product.id, product.name)}
+            className="cursor-pointer"
+          >
             <img
               src={product.image}
               alt={product.name}
@@ -245,8 +258,12 @@ const ProductPage = ({ isDarkMode, data }) => {
               {product.name}
             </h3>
             <div className="flex justify-between items-center mt-2">
-              <p className="text-xl font-bold text-blue-600">{product.price}</p>
-              <p className="text-gray-500 line-through">{product.oldPrice}</p>
+              <p className="text-xl font-bold text-blue-600">
+                ${product.price.toFixed(2)}
+              </p>
+              <p className="text-gray-500 line-through">
+                ${product.oldPrice?.toFixed(2)}
+              </p>
             </div>
             <div
               className={`mt-2 px-2 py-1 bg-blue-200 text-blue-800 rounded-lg ${
@@ -258,7 +275,14 @@ const ProductPage = ({ isDarkMode, data }) => {
           </div>
           <div className="flex justify-between items-center mt-4">
             <button
-              onClick={() => handleAddToCart(product.name)}
+              onClick={() =>
+                handleAddToCart(
+                  product.name,
+                  product.id,
+                  product.image,
+                  product.price
+                )
+              }
               className={`bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-300 ${
                 isDarkMode ? "dark:bg-gray-600" : ""
               }`}

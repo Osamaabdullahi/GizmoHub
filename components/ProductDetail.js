@@ -1,9 +1,15 @@
 "use client";
+import useCartStore from "@/store";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ProductDetailPage = ({ product, isDarkMode }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const addItem = useCartStore((state) => state.addItem);
+  const router = useRouter();
 
   const handlePreviousImage = () => {
     setCurrentImageIndex((prevIndex) =>
@@ -15,6 +21,12 @@ const ProductDetailPage = ({ product, isDarkMode }) => {
     setCurrentImageIndex((prevIndex) =>
       prevIndex === product.images.length - 1 ? 0 : prevIndex + 1
     );
+  };
+
+  const handleAddToCart = (name, id, image, price) => {
+    const item = { id, name, price, image, quantity: 1 };
+    addItem(item);
+    toast.success(`${name} added to cart!`);
   };
 
   return (
@@ -105,6 +117,14 @@ const ProductDetailPage = ({ product, isDarkMode }) => {
             </p>
             <div className="flex items-center space-x-4">
               <button
+                onClick={() =>
+                  handleAddToCart(
+                    product.name,
+                    product.id,
+                    product.image,
+                    product.price
+                  )
+                }
                 className={`bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 ${
                   isDarkMode ? "hover:bg-blue-500" : "hover:bg-blue-700"
                 }`}
@@ -112,18 +132,28 @@ const ProductDetailPage = ({ product, isDarkMode }) => {
                 Add to Cart
               </button>
               <button
-                className={`bg-gray-200 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-300 ${
+                onClick={() => {
+                  handleAddToCart(
+                    product.name,
+                    product.id,
+                    product.image,
+                    product.price
+                  );
+                  router.push("/product/cart");
+                }}
+                className={`bg-green-200 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-300 ${
                   isDarkMode
                     ? "hover:bg-gray-300 text-gray-900"
                     : "hover:bg-gray-400"
                 }`}
               >
-                Wishlist
+                buy now
               </button>
             </div>
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };
