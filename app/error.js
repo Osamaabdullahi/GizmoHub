@@ -1,4 +1,4 @@
-// pages/_error.js
+"use client";
 import React from "react";
 import Error from "next/error";
 
